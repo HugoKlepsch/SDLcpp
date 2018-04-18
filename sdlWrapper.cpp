@@ -1,25 +1,29 @@
 #include <iostream>
 #include <tuple>
 #include <SDL2/SDL.h>
+
+#include "Logger.hpp"
 #include "sdlWrapper.hpp"
 
-void SDLWrapper::logSDLError ( std::ostream & os, std::string msg ) {
-    os << msg << " error: " << SDL_GetError() << std::endl;
+static Logger logger ( std::cout, Logger::LogLevel::INFO );
+
+void SDLWrapper::logSDLError ( std::string msg ) {
+    logger.e ( msg + " error: " + SDL_GetError() );
 }
 
 SDLWrapper::Session::Session () {
     if ( SDL_Init ( SDL_INIT_VIDEO ) != 0 ) {
-        logSDLError ( std::cout, "SDL_Init" );
+        logSDLError ( "SDL_Init" );
         throw std::runtime_error ( "SDL_Init" );
     }
 
-    std::cout << "Constructed session" << std::endl;
+    logger.d ( "Constructed session" );
 }
 
 SDLWrapper::Session::~Session () {
     SDL_Quit();
 
-    std::cout << "Destroyed session" << std::endl;
+    logger.d ( "Destroyed session" );
 }
 
 SDLWrapper::Window::Window ( std::string title, int width, int height ) {
@@ -30,17 +34,17 @@ SDLWrapper::Window::Window ( std::string title, int width, int height ) {
             height,
             SDL_WINDOW_SHOWN );
     if ( w == nullptr ) {
-        logSDLError ( std::cout, "SDL_CreateWindow" );
+        logSDLError ( "SDL_CreateWindow" );
         throw std::runtime_error ( "SDL_CreateWindow" );
     }
 
-    std::cout << "Constructed window" << std::endl;
+    logger.d ( "Constructed window" );
 }
 
 SDLWrapper::Window::~Window () {
     SDL_DestroyWindow ( w );
 
-    std::cout << "Destroyed window" << std::endl;
+    logger.d ( "Destroyed window" );
 }
 
 
@@ -48,17 +52,17 @@ SDLWrapper::Renderer::Renderer ( SDLWrapper::Window & window,
         Uint32 flags = SDL_RENDERER_ACCELERATED ) {
     r = SDL_CreateRenderer ( window.w, -1, flags );
     if ( r == nullptr ) {
-        logSDLError ( std::cout, "SDL_CreateRenderer" );
+        logSDLError ( "SDL_CreateRenderer" );
         throw std::runtime_error ( "SDL_CreateRenderer" );
     }
 
-    std::cout << "Constructed renderer" << std::endl;
+    logger.d ( "Constructed renderer" );
 }
 
 SDLWrapper::Renderer::~Renderer () {
     SDL_DestroyRenderer ( r );
 
-    std::cout << "Destroyed renderer" << std::endl;
+    logger.d ( "Destroyed renderer" );
 }
 
 SDLWrapper::Surface::Surface ( int width, int height, int bitDepth = 32 ) {
@@ -71,17 +75,17 @@ SDLWrapper::Surface::Surface ( int width, int height, int bitDepth = 32 ) {
             bmask,
             amask );
     if ( s == nullptr ) {
-        logSDLError ( std::cout, "SDL_CreateRGBSurface" );
+        logSDLError ( "SDL_CreateRGBSurface" );
         throw std::runtime_error ( "SDL_CreateRGBSurface" );
     }
 
-    std::cout << "Constructed surface" << std::endl;
+    logger.d ( "Constructed surface" );
 }
 
 SDLWrapper::Surface::~Surface () {
     SDL_FreeSurface ( s );
 
-    std::cout << "Destroyed surface" << std::endl;
+    logger.d ( "Destroyed surface" );
 }
 
 void SDLWrapper::Surface::setPixel ( int x, int y, int r, int g, int b, int a ) {
@@ -163,15 +167,15 @@ std::tuple < Uint8, Uint8, Uint8, Uint8 > SDLWrapper::Surface::getPixel ( int x,
 SDLWrapper::Texture::Texture ( SDLWrapper::Surface & surface, SDLWrapper::Renderer & ren ) {
     t = SDL_CreateTextureFromSurface ( ren.r, surface.s );
     if ( t == nullptr ) {
-        logSDLError ( std::cout, "SDL_CreateTextureFromSurface" );
+        logSDLError ( "SDL_CreateTextureFromSurface" );
         throw std::runtime_error ( "SDL_CreateTextureFromSurface" );
     }
 
-    std::cout << "Constructed texture" << std::endl;
+    logger.d ( "Constructed texture" );
 }
 
 SDLWrapper::Texture::~Texture () {
     SDL_DestroyTexture ( t );
 
-    std::cout << "Destroyed texture" << std::endl;
+    logger.d ( "Destroyed texture" );
 }

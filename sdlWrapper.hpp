@@ -1,6 +1,6 @@
 namespace SDLWrapper {
 
-    void logSDLError ( std::ostream & os, std::string unit );
+    void logSDLError ( std::string unit );
 
     class Session {
         public:

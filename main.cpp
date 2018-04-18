@@ -1,5 +1,6 @@
 #include <iostream>
 #include <SDL2/SDL.h>
+
 #include "sdlWrapper.hpp"
 
 #define W 640
