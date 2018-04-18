@@ -1,3 +1,4 @@
+#include <tuple>
 #include <iostream>
 #include <SDL2/SDL.h>
 
@@ -5,6 +6,14 @@
 
 #define W 640
 #define H 480
+
+void printPixel ( std::tuple < Uint8, Uint8, Uint8, Uint8 > rgbaPixel ) {
+    std::cout << "Pixel at (0, 0): r(" << 
+        static_cast < int > ( std::get < 0 > ( rgbaPixel ) ) << ") g(" <<
+        static_cast < int > ( std::get < 1 > ( rgbaPixel ) ) << ") b(" <<
+        static_cast < int > ( std::get < 2 > ( rgbaPixel ) ) << ") a(" <<
+        static_cast < int > ( std::get < 3 > ( rgbaPixel ) ) << ")" << std::endl;
+}
 
 int newMain ( int width, int height ) {
     SDLWrapper::Session session;
@@ -17,6 +26,10 @@ int newMain ( int width, int height ) {
             surface.setPixel ( i, j, 255, 0, 0, 255 );
         }
     }
+
+    auto rgbaPixel = surface.getPixel ( 0, 0 );
+
+    printPixel ( rgbaPixel );
 
     for ( int j = 60; j < 110; ++j ) {
         for ( int i = 0; i < 640; ++i ) {

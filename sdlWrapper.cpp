@@ -97,9 +97,8 @@ void SDLWrapper::Surface::setPixel ( int x, int y, int r, int g, int b, int a ) 
             *( ( ( Uint32 * )( s->pixels ) ) + x + ( y * s->w ) ) = ( Uint32 )pixel;
             break;
         case 3:
-            std::cerr <<
-                "Could not set pixel on surface with 24 bit pixels. Bug the author to implement this" <<
-                std::endl;
+            logger.e (
+                "Could not set pixel on surface with 24 bit pixels. Bug the author to implement this" );
             break;
         case 2:
             *( ( ( Uint16 * )( s->pixels ) ) + x + ( y * s->w ) ) = ( Uint16 )pixel;
@@ -108,9 +107,8 @@ void SDLWrapper::Surface::setPixel ( int x, int y, int r, int g, int b, int a ) 
             *( ( ( Uint8 * )( s->pixels ) ) + x + ( y * s->w ) ) = ( Uint8 )pixel;
             break;
         default:
-            std::cerr <<
-                "Could not set pixel on surface with unknown bit depth." <<
-                std::endl;
+            logger.e (
+                "Could not set pixel on surface with unknown bit depth." );
             break;
     }
 }
@@ -128,29 +126,27 @@ std::tuple < Uint8, Uint8, Uint8, Uint8 > SDLWrapper::Surface::getPixel ( int x,
     Uint32 pixel = 0;
     switch ( s->format->BytesPerPixel ) {
         case 4:
-            pixel = *( Uint32 * )( s->pixels ) + x + ( y * s->w );
+            pixel = ( Uint32 )( *( ( ( Uint32 * )( s->pixels ) ) + x + ( y * s->w ) ) );
 
             break;
         case 3:
-            std::cerr <<
-                "Could not get pixel on surface with 24 bit pixels. Bug the author to implement this" <<
-                std::endl;
+            logger.e (
+                "Could not get pixel on surface with 24 bit pixels. Bug the author to implement this" );
 
             break;
         case 2:
-            pixel = ( Uint32 )( *( Uint16 * )( s->pixels ) + x + ( y * s->w ) );
+            pixel = ( Uint32 )( *( ( ( Uint16 * )( s->pixels ) ) + x + ( y * s->w ) ) );
             pixel &= 0x0000FFFF;
 
             break;
         case 1:
-            pixel = ( Uint32 )( *( Uint8 * )( s->pixels ) + x + ( y * s->w ) );
+            pixel = ( Uint32 )( *( ( ( Uint8 * )( s->pixels ) ) + x + ( y * s->w ) ) );
             pixel &= 0x000000FF;
 
             break;
         default:
-            std::cerr <<
-                "Could not get pixel on surface with unknown bit depth." <<
-                std::endl;
+            logger.e (
+                "Could not get pixel on surface with unknown bit depth." );
 
             break;
     }
