@@ -28,9 +28,11 @@ if (SDL2_FOUND)
 endif (SDL2_FOUND)
 include_directories(${SDL2_INCLUDE_DIRS})
 
+add_subdirectory(fractal-generator)
+
 add_executable(SDLcpp main.cpp sdlWrapper.cpp)
 message("SDL library: " ${SDL2_LIBRARIES})
 message("SDL include path: " ${SDL2_INCLUDE_DIRS})
-target_link_libraries(SDLcpp SDL2)
+target_link_libraries(SDLcpp SDL2 fractal)
 
 install(TARGETS SDLcpp RUNTIME DESTINATION ${BIN_DIR})

@@ -1,0 +1,3 @@
+[submodule "fractal-generator"]
+	path = fractal-generator
+	url = git@github.com:HugoKlepsch/fractal-generator.git
